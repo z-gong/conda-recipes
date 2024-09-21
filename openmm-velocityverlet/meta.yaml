@@ -1,0 +1,52 @@
+{% set name = "openmm-velocityverlet" %}
+{% set version = "1.1.0" %}
+{% set url="https://github.com/z-gong/openmm-velocityVerlet" %}
+{% set build = 0 %}
+{% set cuda_version = "12.0" %} # 12.0 is the minimal CUDA version that works with conda-forge repo
+{% set openmm_version = "8.1.2" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  git_url: {{ url }}
+  git_branch: dev
+
+build:
+  number: {{ build }}
+  string: openmm812_{{ build }}
+
+requirements:
+  build:
+    - python
+    - cython
+    - numpy <2
+    - swig
+    - doxygen
+    - cmake
+    - make
+    - gxx
+    - cuda-version {{ cuda_version }}
+    - cuda-compiler
+    - cuda-nvrtc-dev
+    - cuda-profiler-api
+    - openmm {{ openmm_version }}
+
+  run:
+    - python
+    - numpy <2
+    - cuda-version {{ cuda_version }}
+    - cuda-cudart
+    - cuda-nvrtc
+    - openmm {{ openmm_version }}
+
+about:
+  home: {{ url }}
+  license: LGPL-3.0-or-later
+  license_family: LGPL
+  summary: OpenMM plugin for simulating electrochemical systems
+
+  description: |
+    This plugin works with OpenMM to perform velocity-Verlet integration,
+    along with various simulation methods that can not be done easily with CustomIntegrator.
