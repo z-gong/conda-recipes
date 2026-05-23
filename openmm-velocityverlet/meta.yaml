@@ -1,9 +1,10 @@
 {% set name = "openmm-velocityverlet" %}
 {% set version = "1.1.0" %}
 {% set url="https://github.com/z-gong/openmm-velocityVerlet" %}
-{% set build = 0 %}
-{% set cuda_version = "12.0" %} # 12.0 is the minimal CUDA version that works with conda-forge repo
-{% set openmm_version = "8.1.2" %}
+{% set build = 1 %}
+{% set cuda_version_min = "12.0" %} # 12.0 is the minimal CUDA version that works with conda-forge repo
+{% set cuda_version_max = "13" %} # package built with CUDA 12.0 should work with CUDA 12.x
+{% set openmm_version = "8.5.1" %}
 
 package:
   name: {{ name }}
@@ -15,19 +16,19 @@ source:
 
 build:
   number: {{ build }}
-  string: openmm812_{{ build }}
+  string: openmm851_{{ build }}
 
 requirements:
   build:
     - python
     - cython
-    - numpy <2
+    - numpy
     - swig
     - doxygen
-    - cmake
+    - cmake <4
     - make
     - gxx
-    - cuda-version {{ cuda_version }}
+    - cuda-version {{ cuda_version_min }}
     - cuda-compiler
     - cuda-nvrtc-dev
     - cuda-profiler-api
@@ -35,8 +36,8 @@ requirements:
 
   run:
     - python
-    - numpy <2
-    - cuda-version {{ cuda_version }}
+    - numpy
+    - cuda-version >={{ cuda_version_min }},<{{ cuda_version_max }}
     - cuda-cudart
     - cuda-nvrtc
     - openmm {{ openmm_version }}
